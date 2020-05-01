@@ -2,7 +2,7 @@ import React from 'react'
 
 import NbViewer from 'react-nbviewer'
 import 'react-nbviewer/dist/index.css'
-import sourceURL from './sine.ipynb'
+import sourceURL from './example.ipynb'
 
 const App = () => {
   const [source, setSource] = React.useState('')
