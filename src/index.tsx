@@ -40,6 +40,44 @@ const StreamOutput = ({ output }: { output: NbStreamOutput }) => (
   <pre className={`output ${output.name === 'stderr' ? 'stderr' : ''}`}>{output.text.join('')}</pre>
 )
 
+const ansiClassNames = {
+  30: 'ansi-black-fg',
+  31: 'ansi-red-fg',
+  32: 'ansi-green-fg',
+  33: 'ansi-yellow-fg',
+  34: 'ansi-blue-fg',
+  35: 'ansi-magenta-fg',
+  36: 'ansi-cyan-fg',
+  37: 'ansi-white-fg',
+}
+
+function ansiCodeToClassName(ansiCode: string) {
+  const codes = ansiCode.slice(2, -1).split(';')
+  if (codes === ['0'])
+    return null
+  return codes.map(c => ansiClassNames[c]).join(' ')
+}
+
+const ErrorOutput = ({ output }: { output: NbErrorOutput }) => {
+  const r = /(\x1b\[.+?m)/g
+  const traceback = output.traceback.join('')
+  const splitted = traceback.split(r)
+  const spans = []
+  let lastClassName: string | null = null
+  for (const s of splitted) {
+    if (r.test(s)) {
+      lastClassName = ansiCodeToClassName(s)
+      continue
+    }
+    if (!lastClassName) {
+      spans.push(s)
+    } else {
+      spans.push(<span className={lastClassName}>{s}</span>)
+    }
+  }
+  return <pre>{spans}</pre>
+}
+
 const CodeCell = ({ cell }: {
   cell: NbCodeCell
 }) => {
@@ -58,6 +96,8 @@ const CodeCell = ({ cell }: {
               return <DisplayDataOutput output={output} key={i} />
             case 'stream':
               return <StreamOutput output={output} key={i} />
+            case 'error':
+              return <ErrorOutput output={output} key={i} />
             default:
               return undefined
           }
