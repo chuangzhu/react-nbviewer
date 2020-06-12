@@ -1,7 +1,7 @@
-import { ExampleComponent } from '.'
+import NbViewer from '.'
 
-describe('ExampleComponent', () => {
+describe('NbViewer', () => {
   it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
+    expect(NbViewer).toBeTruthy()
   })
 })

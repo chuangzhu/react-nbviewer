@@ -1,7 +1,6 @@
 import React from 'react'
 
-import NbViewer from 'react-nbviewer'
-import 'react-nbviewer/dist/index.css'
+import NbViewer from 'react-nbviewer/dist/default.tsx'
 import sourceURL from './example.ipynb'
 
 const App = () => {

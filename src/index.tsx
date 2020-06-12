@@ -62,19 +62,16 @@ const ErrorOutput = ({ output }: { output: NbErrorOutput }) => {
   const r = /(\x1b\[.+?m)/g
   const traceback = output.traceback.join('')
   const splitted = traceback.split(r)
-  const spans = []
+  const spans: React.ReactChild[] = []
   let lastClassName: string | null = null
-  for (const s of splitted) {
+  splitted.forEach((s, i) => {
     if (r.test(s)) {
       lastClassName = ansiCodeToClassName(s)
-      continue
+      return
     }
-    if (!lastClassName) {
-      spans.push(s)
-    } else {
-      spans.push(<span className={lastClassName}>{s}</span>)
-    }
-  }
+    if (!lastClassName) spans.push(s)
+    else spans.push(<span className={lastClassName} key={i}>{s}</span>)
+  })
   return <pre>{spans}</pre>
 }
 
@@ -107,11 +104,18 @@ const CodeCell = ({ cell }: {
   )
 }
 
-interface Props {
-  source: string
+const Markdown = (props: { source: string }) => (
+  <div>{props.source}</div>
+)
+
+interface NbViewerProps {
+  source: string,
+  renderers?: {
+    markdown?: React.ElementType
+  }
 }
 
-export default ({ source }: Props) => {
+export default function NbViewer({ source, renderers }: NbViewerProps) {
   if (!source) return null
   const ipynb: NbFormat = JSON.parse(source)
   if (ipynb.nbformat !== 4)
@@ -121,7 +125,9 @@ export default ({ source }: Props) => {
       {ipynb.cells.map((cell, i) => (
         cell.cell_type === 'code' ?
           <CodeCell cell={cell} key={i} /> :
-          <div key={i}>{cell.source}</div>
+          (renderers?.markdown ?
+            <renderers.markdown source={cell.source.join('')} key={i} /> :
+            <Markdown source={cell.source.join('')} key={i} />)
       ))}
     </div>
   )
