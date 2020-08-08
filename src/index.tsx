@@ -7,23 +7,23 @@ const base64ToImage = (mime: string, base64: string) => (
 const DisplayDataOutput = ({ output }: {
   output: NbDisplayDataOutput
 }) => {
-  const { data } = output
+  const { data: datas } = output
   const formatPriority = ['text/html', 'image/svg+xml', 'image/png', 'image/jpeg', 'text/plain']
   for (const format of formatPriority) {
-    if (format in data) {
-      const realData = data[format]
+    if (format in datas) {
+      const datalines = datas[format]
       if (format === 'image/svg+xml') {
-        const svg = realData.join('')
-        return <div dangerouslySetInnerHTML={{ __html: svg }} />
+        const svg = datalines.join('')
+        return <img src={`data:image/svg+xml;utf8,${svg}`}/>
       }
       if (format === 'text/html')
-        return <div dangerouslySetInnerHTML={{ __html: realData.join('') }} />
+        return <div dangerouslySetInnerHTML={{ __html: datalines.join('') }} />
       if (format.startsWith('image/')) {
-        if (Array.isArray(realData))
-          return base64ToImage(format, realData[0])
-        return base64ToImage(format, realData)
+        if (Array.isArray(datalines))
+          return base64ToImage(format, datalines[0])
+        return base64ToImage(format, datalines)
       }
-      return <pre>{realData.join('')}</pre>
+      return <pre>{datalines.join('')}</pre>
     }
   }
   throw new Error('Unsupported output format')

@@ -5,9 +5,9 @@
   "author": "chuangzhu",
   "license": "MIT",
   "repository": "chuangzhu/react-nbviewer",
-  "main": "dist/index.tsx.js",
-  "module": "dist/index.tsx.modern.js",
-  "source": ["src/index.tsx", "src/default.tsx"],
+  "main": "dist/index.js",
+  "module": "dist/index.modern.js",
+  "source": "src/index.tsx",
   "engines": {
     "node": ">=10"
   },
