@@ -4,20 +4,46 @@ const base64ToImage = (mime: string, base64: string) => (
   <img src={`data:${mime};base64,${base64}`} />
 )
 
+function getDataFrame(raw: string) {
+  const rows = raw.split('\n')
+  const elements = rows.map(r => r.split('  '))
+  return (
+    <table className="dataframe">
+      <thead>
+        <tr>
+          {elements[0].map((h, hidx) => <th key={hidx}>{h}</th>)}
+        </tr>
+      </thead>
+      <tbody>
+        {elements.slice(1).map((row, rowidx) => (
+          <tr key={rowidx}>
+            <th>{row[0]}</th>
+            {row.slice(1).map((d, idx) => <td key={idx}>{d}</td>)}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
 const DisplayDataOutput = ({ output }: {
   output: NbDisplayDataOutput
 }) => {
   const { data: datas } = output
-  const formatPriority = ['text/html', 'image/svg+xml', 'image/png', 'image/jpeg', 'text/plain']
-  for (const format of formatPriority) {
+  const formats = ['text/html', 'image/svg+xml', 'image/png', 'image/jpeg', 'text/plain']
+  // e.g. pandas.DataFrame
+  if ((formats[0] in datas) && (formats[4] in datas)) {
+    return getDataFrame(datas[formats[4]].join(''))
+  }
+  for (const format of formats) {
     if (format in datas) {
       const datalines = datas[format]
       if (format === 'image/svg+xml') {
         const svg = datalines.join('')
-        return <img src={`data:image/svg+xml;utf8,${svg}`}/>
+        return <img src={`data:image/svg+xml;utf8,${svg}`} />
       }
       if (format === 'text/html')
-        return <div dangerouslySetInnerHTML={{ __html: datalines.join('') }} />
+        return <iframe srcDoc={datalines.join('')}></iframe>
       if (format.startsWith('image/')) {
         if (Array.isArray(datalines))
           return base64ToImage(format, datalines[0])
@@ -37,7 +63,9 @@ const ExecuteResultOutput = (props: { output: NbDisplayDataOutput }) => (
 )
 
 const StreamOutput = ({ output }: { output: NbStreamOutput }) => (
-  <pre className={`output ${output.name === 'stderr' ? 'stderr' : ''}`}>{output.text.join('')}</pre>
+  <div className={`output_stream ${output.name === 'stderr' ? 'output_stderr' : ''}`}>
+    <pre>{output.text.join('')}</pre>
+  </div>
 )
 
 const ansiClassNames = {
@@ -110,12 +138,15 @@ const Markdown = (props: { source: string }) => (
 
 interface NbViewerProps {
   source: string,
-  renderers?: {
-    markdown?: React.ElementType
+  renderers: {
+    markdown: React.ElementType
   }
 }
 
-export default function NbViewer({ source, renderers }: NbViewerProps) {
+export default function NbViewer({
+  source,
+  renderers = { markdown: Markdown }
+}: NbViewerProps) {
   if (!source) return null
   const ipynb: NbFormat = JSON.parse(source)
   if (ipynb.nbformat !== 4)
@@ -125,9 +156,7 @@ export default function NbViewer({ source, renderers }: NbViewerProps) {
       {ipynb.cells.map((cell, i) => (
         cell.cell_type === 'code' ?
           <CodeCell cell={cell} key={i} /> :
-          (renderers?.markdown ?
-            <renderers.markdown source={cell.source.join('')} key={i} /> :
-            <Markdown source={cell.source.join('')} key={i} />)
+          <renderers.markdown source={cell.source.join('')} key={i} />
       ))}
     </div>
   )
