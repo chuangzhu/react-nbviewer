@@ -6,6 +6,7 @@ import Markdown from 'react-markdown'
 import MathPlugin from 'remark-math'
 import { InlineMath, BlockMath } from 'react-katex'
 
+import 'react-nbviewer/dist/index.css'
 import 'katex/dist/katex.min.css'
 
 const MathMarkdown = (props) => {

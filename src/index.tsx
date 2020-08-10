@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import styles from './index.css'
 
 const base64ToImage = (mime: string, base64: string) => (
   <img src={`data:${mime};base64,${base64}`} />
@@ -8,16 +9,19 @@ function getDataFrame(raw: string) {
   const rows = raw.split('\n')
   const elements = rows.map(r => r.split('  '))
   return (
-    <table className="dataframe">
+    <table className={`dataframe ${styles.dataframe}`}>
       <thead>
         <tr>
-          {elements[0].map((h, hidx) => <th key={hidx}>{h}</th>)}
+          <td />
+          {/* Column headers */}
+          {elements[0].slice(1).map((h, hidx) => <th key={hidx} scope="col">{h}</th>)}
         </tr>
       </thead>
       <tbody>
         {elements.slice(1).map((row, rowidx) => (
           <tr key={rowidx}>
-            <th>{row[0]}</th>
+            {/* Row header */}
+            <th scope="row">{row[0]}</th>
             {row.slice(1).map((d, idx) => <td key={idx}>{d}</td>)}
           </tr>
         ))}
@@ -49,27 +53,32 @@ const DisplayDataOutput = ({ output }: {
           return base64ToImage(format, datalines[0])
         return base64ToImage(format, datalines)
       }
-      return <pre>{datalines.join('')}</pre>
+      return <pre><code>{datalines.join('')}</code></pre>
     }
   }
   throw new Error('Unsupported output format')
 }
 
-const StreamOutput = ({ output }: { output: NbStreamOutput }) => (
-  <div className={`output_stream ${output.name === 'stderr' ? 'output_stderr' : ''}`}>
-    <pre>{output.text.join('')}</pre>
-  </div>
-)
+const StreamOutput = ({ output }: { output: NbStreamOutput }) => {
+  const className = `output_stream ${styles.output_stream} ${
+    output.name === 'stderr' ? `output_stderr ${styles.output_stderr}` : ''
+    }`
+  return (
+    <div className={className}>
+      <pre>{output.text.join('')}</pre>
+    </div>
+  )
+}
 
 const ansiClassNames = {
-  30: 'ansi-black-fg',
-  31: 'ansi-red-fg',
-  32: 'ansi-green-fg',
-  33: 'ansi-yellow-fg',
-  34: 'ansi-blue-fg',
-  35: 'ansi-magenta-fg',
-  36: 'ansi-cyan-fg',
-  37: 'ansi-white-fg',
+  30: `ansi_black_fg ${styles.ansi_black_fg}`,
+  31: `ansi_red_fg ${styles.ansi_red_fg}`,
+  32: `ansi_green_fg ${styles.ansi_green_fg}`,
+  33: `ansi_yellow_fg ${styles.ansi_yellow_fg}`,
+  34: `ansi_blue_fg ${styles.ansi_blue_fg}`,
+  35: `ansi_magenta_fg ${styles.ansi_magenta_fg}`,
+  36: `ansi_cyan_fg ${styles.ansi_cyan_fg}`,
+  37: `ansi_white_fg ${styles.ansi_white_fg}`,
 }
 
 function ansiCodeToClassName(ansiCode: string) {
@@ -103,13 +112,15 @@ const CodeCell = ({ cell }: {
     <Fragment>
       <tr>
         {/* "In [...]:" for every code cell */}
-        <td><pre>{`In [${cell.execution_count || ' '}]:`}</pre></td>
+        <td className={`input_prompt ${styles.input_prompt}`}><pre>
+          {`In [${cell.execution_count || ' '}]:`}
+        </pre></td>
         <td><pre><code>{cell.source.join('')}</code></pre></td>
       </tr>
       {cell.outputs.map((output, i) => {
         return (
           <tr key={i}>
-            <td><pre>
+            <td className={`output_prompt ${styles.output_prompt}`}><pre>
               {output.output_type === 'execute_result' ?
                 `Out[${output.execution_count}]:` : ''}
             </pre></td>
@@ -163,7 +174,7 @@ export default function NbViewer({
             <CodeCell cell={cell} key={i} /> :
 
             <tr key={i}>
-              <td></td>
+              <td />
               <td><renderers.markdown source={cell.source.join('')} key={i} /></td>
             </tr>
         ))}

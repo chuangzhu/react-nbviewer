@@ -1,0 +1,42 @@
+.dataframe {
+  border-collapse: collapse;
+}
+
+.dataframe, .dataframe th, .dataframe td {
+  border: 1px solid;
+}
+
+.input_prompt, .output_prompt {
+  text-align: right;
+  vertical-align: top;
+}
+
+.output_stderr {
+  background-color: #fdd;
+}
+
+.ansi_black_fg {
+  color: #3E424D;
+}
+.ansi_red_fg {
+  color: #E75C58;
+}
+.ansi_green_fg {
+  color: #00A250;
+}
+.ansi_yellow_fg {
+  color: #DDB62B;
+}
+.ansi_blue_fg {
+  color: #208FFB;
+}
+.ansi_magenta_fg {
+  color: #D160C4;
+}
+.ansi_cyan_fg {
+  color: #60C6C8;
+}
+.ansi_white_fg {
+  color: #C5C1B4;
+}
+
