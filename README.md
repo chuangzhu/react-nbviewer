@@ -27,7 +27,14 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
   code={SyntaxHighlighter} />
 ```
 
-Importing `react-nbviewer/dist/index.css` is not requisite. You can style the component on your own. See [`src/index.css`](./src/index.css) for details.
+Importing `react-nbviewer/dist/index.css` is not required. You can style the component on your own. See [`src/index.css`](./src/index.css) for details.
+
+## Options
+| Name | Type | Description |
+|:-----|:-----|:------------|
+| `source` | string or object | The Jupyter Notebook source to parse. |
+| `markdown` | React component | (Optional) The React component to render Markdown. |
+| `code` | React component | (Optional) The React component to highlight code blocks. |
 
 ## License
 
