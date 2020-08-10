@@ -105,14 +105,18 @@ const ErrorOutput = ({ output }: { output: NbErrorOutput }) => {
   return <pre>{spans}</pre>
 }
 
+interface CodeComponentProps {
+  language: string
+  children: string
+}
+
 const CodeCell = ({ cell, code }: {
   cell: NbCodeCell,
-  code?: React.ElementType
+  code: React.ElementType<CodeComponentProps>
 }) => {
-  const value = cell.source.join('')
-  const codeElement = code ?
-    React.createElement(code, { language: 'python', value }, null) :
-    <pre><code>{value}</code></pre>
+  const source = cell.source.join('')
+  const codeElement =
+    React.createElement(code, { language: 'python', children: source }, source)
 
   return (
     <Fragment>
@@ -153,25 +157,27 @@ const CodeCell = ({ cell, code }: {
   )
 }
 
-const Markdown = (props: { source: string }) => (
-  <div>{props.source}</div>
-)
+interface MarkdownProps {
+  source: string
+}
 
 interface NbViewerProps {
   source: string | NbFormat,
-  markdown?: React.ElementType,
-  code?: React.ElementType
+  markdown?: React.ElementType<MarkdownProps>,
+  code?: React.ElementType<CodeComponentProps>
 }
 
 export default function NbViewer({
   source,
-  markdown = Markdown,
-  code
+  markdown = PlainMarkdown,
+  code = PlainCode
 }: NbViewerProps) {
   if (!source) return null
   const ipynb: NbFormat = typeof source === 'string' ? JSON.parse(source) : source
+  // TODO: support more versions
   if (ipynb.nbformat !== 4)
     throw new Error('react-nbviewer currently supports nbformat 4 only')
+
   return (
     <table>
       <tbody>
@@ -192,4 +198,13 @@ export default function NbViewer({
       </tbody>
     </table>
   )
+}
+
+// Defaults when not provided
+function PlainMarkdown(props: MarkdownProps) {
+  return <div>{props.source}</div>
+}
+
+function PlainCode(props: CodeComponentProps) {
+  return <pre><code>{props.children}</code></pre>
 }
