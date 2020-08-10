@@ -10,6 +10,12 @@
   text-align: right;
   vertical-align: top;
 }
+.input_prompt {
+  color: #303F9F;
+}
+.output_prompt {
+  color: #D84315;
+}
 
 .output_stderr {
   background-color: #fdd;

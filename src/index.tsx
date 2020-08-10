@@ -105,9 +105,15 @@ const ErrorOutput = ({ output }: { output: NbErrorOutput }) => {
   return <pre>{spans}</pre>
 }
 
-const CodeCell = ({ cell }: {
-  cell: NbCodeCell
+const CodeCell = ({ cell, code }: {
+  cell: NbCodeCell,
+  code?: React.ElementType
 }) => {
+  const value = cell.source.join('')
+  const codeElement = code ?
+    React.createElement(code, { language: 'python', value }, null) :
+    <pre><code>{value}</code></pre>
+
   return (
     <Fragment>
       <tr>
@@ -115,7 +121,7 @@ const CodeCell = ({ cell }: {
         <td className={`input_prompt ${styles.input_prompt}`}><pre>
           {`In [${cell.execution_count || ' '}]:`}
         </pre></td>
-        <td><pre><code>{cell.source.join('')}</code></pre></td>
+        <td>{codeElement}</td>
       </tr>
       {cell.outputs.map((output, i) => {
         return (
@@ -152,18 +158,18 @@ const Markdown = (props: { source: string }) => (
 )
 
 interface NbViewerProps {
-  source: string,
-  renderers: {
-    markdown: React.ElementType
-  }
+  source: string | NbFormat,
+  markdown?: React.ElementType,
+  code?: React.ElementType
 }
 
 export default function NbViewer({
   source,
-  renderers = { markdown: Markdown }
+  markdown = Markdown,
+  code
 }: NbViewerProps) {
   if (!source) return null
-  const ipynb: NbFormat = JSON.parse(source)
+  const ipynb: NbFormat = typeof source === 'string' ? JSON.parse(source) : source
   if (ipynb.nbformat !== 4)
     throw new Error('react-nbviewer currently supports nbformat 4 only')
   return (
@@ -171,11 +177,16 @@ export default function NbViewer({
       <tbody>
         {ipynb.cells.map((cell, i) => (
           cell.cell_type === 'code' ?
-            <CodeCell cell={cell} key={i} /> :
+            <CodeCell cell={cell} code={code} key={i} /> :
 
             <tr key={i}>
               <td />
-              <td><renderers.markdown source={cell.source.join('')} key={i} /></td>
+              <td>{
+                React.createElement(markdown, {
+                  source: cell.source.join(''),
+                  key: i
+                }, null)
+              }</td>
             </tr>
         ))}
       </tbody>
