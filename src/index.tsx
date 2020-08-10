@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { Fragment } from 'react'
 
 const base64ToImage = (mime: string, base64: string) => (
   <img src={`data:${mime};base64,${base64}`} />
@@ -55,13 +55,6 @@ const DisplayDataOutput = ({ output }: {
   throw new Error('Unsupported output format')
 }
 
-const ExecuteResultOutput = (props: { output: NbDisplayDataOutput }) => (
-  <div>
-    <span>{`Out [${props.output.execution_count}]`}</span>
-    <DisplayDataOutput output={props.output} />
-  </div>
-)
-
 const StreamOutput = ({ output }: { output: NbStreamOutput }) => (
   <div className={`output_stream ${output.name === 'stderr' ? 'output_stderr' : ''}`}>
     <pre>{output.text.join('')}</pre>
@@ -107,28 +100,39 @@ const CodeCell = ({ cell }: {
   cell: NbCodeCell
 }) => {
   return (
-    <div>
-      <div>
-        <span>{`In [${cell.execution_count || ' '}]`}</span>
-        <pre><code>{cell.source.join('')}</code></pre>
-      </div>
-      <div>
-        {cell.outputs.map((output, i) => {
-          switch (output.output_type) {
-            case 'execute_result':
-              return <ExecuteResultOutput output={output} key={i} />
-            case 'display_data':
-              return <DisplayDataOutput output={output} key={i} />
-            case 'stream':
-              return <StreamOutput output={output} key={i} />
-            case 'error':
-              return <ErrorOutput output={output} key={i} />
-            default:
-              return undefined
-          }
-        })}
-      </div>
-    </div>
+    <Fragment>
+      <tr>
+        {/* "In [...]:" for every code cell */}
+        <td><pre>{`In [${cell.execution_count || ' '}]:`}</pre></td>
+        <td><pre><code>{cell.source.join('')}</code></pre></td>
+      </tr>
+      {cell.outputs.map((output, i) => {
+        return (
+          <tr key={i}>
+            <td><pre>
+              {output.output_type === 'execute_result' ?
+                `Out[${output.execution_count}]:` : ''}
+            </pre></td>
+            <td>
+              {(() => {
+                switch (output.output_type) {
+                  // The only difference between these two is "Out[...]:"
+                  case 'execute_result':
+                  case 'display_data':
+                    return <DisplayDataOutput output={output} />
+                  case 'stream':
+                    return <StreamOutput output={output} />
+                  case 'error':
+                    return <ErrorOutput output={output} />
+                  default:
+                    return undefined
+                }
+              })()}
+            </td>
+          </tr>
+        )
+      })}
+    </Fragment>
   )
 }
 
@@ -152,12 +156,18 @@ export default function NbViewer({
   if (ipynb.nbformat !== 4)
     throw new Error('react-nbviewer currently supports nbformat 4 only')
   return (
-    <div>
-      {ipynb.cells.map((cell, i) => (
-        cell.cell_type === 'code' ?
-          <CodeCell cell={cell} key={i} /> :
-          <renderers.markdown source={cell.source.join('')} key={i} />
-      ))}
-    </div>
+    <table>
+      <tbody>
+        {ipynb.cells.map((cell, i) => (
+          cell.cell_type === 'code' ?
+            <CodeCell cell={cell} key={i} /> :
+
+            <tr key={i}>
+              <td></td>
+              <td><renderers.markdown source={cell.source.join('')} key={i} /></td>
+            </tr>
+        ))}
+      </tbody>
+    </table>
   )
 }
