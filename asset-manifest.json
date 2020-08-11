@@ -1,26 +1,26 @@
 {
   "files": {
     "main.css": "/react-nbviewer/static/css/main.597228c0.chunk.css",
-    "main.js": "/react-nbviewer/static/js/main.ddf83030.chunk.js",
-    "main.js.map": "/react-nbviewer/static/js/main.ddf83030.chunk.js.map",
-    "runtime-main.js": "/react-nbviewer/static/js/runtime-main.0876c016.js",
-    "runtime-main.js.map": "/react-nbviewer/static/js/runtime-main.0876c016.js.map",
+    "main.js": "/react-nbviewer/static/js/main.6ee03c32.chunk.js",
+    "main.js.map": "/react-nbviewer/static/js/main.6ee03c32.chunk.js.map",
+    "runtime-main.js": "/react-nbviewer/static/js/runtime-main.5e7dfaa3.js",
+    "runtime-main.js.map": "/react-nbviewer/static/js/runtime-main.5e7dfaa3.js.map",
     "static/css/2.36d21b45.chunk.css": "/react-nbviewer/static/css/2.36d21b45.chunk.css",
-    "static/js/2.0ecd3a47.chunk.js": "/react-nbviewer/static/js/2.0ecd3a47.chunk.js",
-    "static/js/2.0ecd3a47.chunk.js.map": "/react-nbviewer/static/js/2.0ecd3a47.chunk.js.map",
+    "static/js/2.4a4d31c0.chunk.js": "/react-nbviewer/static/js/2.4a4d31c0.chunk.js",
+    "static/js/2.4a4d31c0.chunk.js.map": "/react-nbviewer/static/js/2.4a4d31c0.chunk.js.map",
     "index.html": "/react-nbviewer/index.html",
-    "precache-manifest.5efc97ffe81b62db6f25e4bd5b437657.js": "/react-nbviewer/precache-manifest.5efc97ffe81b62db6f25e4bd5b437657.js",
+    "precache-manifest.dc29f65dd3e011b2f8cd4d7c277d4ce2.js": "/react-nbviewer/precache-manifest.dc29f65dd3e011b2f8cd4d7c277d4ce2.js",
     "service-worker.js": "/react-nbviewer/service-worker.js",
     "static/css/2.36d21b45.chunk.css.map": "/react-nbviewer/static/css/2.36d21b45.chunk.css.map",
     "static/css/main.597228c0.chunk.css.map": "/react-nbviewer/static/css/main.597228c0.chunk.css.map",
-    "static/js/2.0ecd3a47.chunk.js.LICENSE.txt": "/react-nbviewer/static/js/2.0ecd3a47.chunk.js.LICENSE.txt",
+    "static/js/2.4a4d31c0.chunk.js.LICENSE.txt": "/react-nbviewer/static/js/2.4a4d31c0.chunk.js.LICENSE.txt",
     "static/media/katex.min.css": "/react-nbviewer/static/media/KaTeX_Typewriter-Regular.f43e8696.woff2"
   },
   "entrypoints": [
-    "static/js/runtime-main.0876c016.js",
+    "static/js/runtime-main.5e7dfaa3.js",
     "static/css/2.36d21b45.chunk.css",
-    "static/js/2.0ecd3a47.chunk.js",
+    "static/js/2.4a4d31c0.chunk.js",
     "static/css/main.597228c0.chunk.css",
-    "static/js/main.ddf83030.chunk.js"
+    "static/js/main.6ee03c32.chunk.js"
   ]
 }
