@@ -1,4 +1,6 @@
 
+// https://nbformat.readthedocs.io/
+
 interface NbCell {
   cell_type: 'markdown' | 'code'
   metadata: {}
@@ -52,7 +54,19 @@ interface NbCodeCell extends NbCell {
   outputs: (NbStreamOutput | NbDisplayDataOutput | NbErrorOutput)[]
 }
 
+interface NbTopLevelMetadata {
+  kernelspec?: {
+    name: string
+    language?: string
+  }
+  language_info?: {
+    name: string
+    version?: string
+  }
+}
+
 interface NbFormat {
   cells: (NbMarkdownCell | NbCodeCell)[]
   nbformat: number
+  metadata: NbTopLevelMetadata
 }

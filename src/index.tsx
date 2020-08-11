@@ -5,6 +5,8 @@ const base64ToImage = (mime: string, base64: string) => (
   <img src={`data:${mime};base64,${base64}`} />
 )
 
+// Putting the 'text/html' output on page is ugly and unsafe
+// Instead, let's parse the raw output
 function getDataFrame(raw: string) {
   const rows = raw.split('\n')
   const elements = rows.map(r => r.split('  '))
@@ -89,6 +91,8 @@ function ansiCodeToClassName(ansiCode: string) {
 }
 
 const ErrorOutput = ({ output }: { output: NbErrorOutput }) => {
+  // Some ANSI escape codes are used to colorize the error output
+  // \033[SGR;FG;BGm
   const r = /(\x1b\[.+?m)/g
   const traceback = output.traceback.join('')
   const splitted = traceback.split(r)
@@ -110,22 +114,23 @@ interface CodeComponentProps {
   children: string
 }
 
-const CodeCell = ({ cell, code }: {
+const CodeCell = ({ cell, ...props }: {
   cell: NbCodeCell,
+  language: string,
   code: React.ElementType<CodeComponentProps>
 }) => {
   const source = cell.source.join('')
-  const codeElement =
-    React.createElement(code, { language: 'python', children: source }, source)
 
   return (
     <Fragment>
       <tr>
         {/* "In [...]:" for every code cell */}
-        <td className={`input_prompt ${styles.input_prompt}`}><pre>
-          {`In [${cell.execution_count || ' '}]:`}
-        </pre></td>
-        <td>{codeElement}</td>
+        <td className={`input_prompt ${styles.input_prompt}`}>
+          <pre>{`In [${cell.execution_count || ' '}]:`}</pre>
+        </td>
+        <td>
+          <props.code language={props.language}>{source}</props.code>
+        </td>
       </tr>
       {cell.outputs.map((output, i) => {
         return (
@@ -178,16 +183,21 @@ export default function NbViewer({
   if (ipynb.nbformat !== 4)
     throw new Error('react-nbviewer currently supports nbformat 4 only')
 
+  const language =
+    ipynb.metadata.kernelspec?.language ||
+    ipynb.metadata.language_info?.name || 'python'
+
   return (
     <table>
       <tbody>
         {ipynb.cells.map((cell, i) => (
           cell.cell_type === 'code' ?
-            <CodeCell cell={cell} code={code} key={i} /> :
+            <CodeCell cell={cell} language={language} code={code} key={i} /> :
 
             <tr key={i}>
               <td />
               <td>{
+                // Not using JSX here because "markdown" is in lower case
                 React.createElement(markdown, {
                   source: cell.source.join(''),
                   key: i
