@@ -32,19 +32,48 @@ const App = () => {
       .then(src => src.text())
       .then(src => setSource(src))
   }, [])
+  const [dragged, setDragged] = React.useState(false)
 
-  function readFile(event) {
-    event.preventDefault()
+  function readFile(file) {
+    if (!file)
+      return
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = (e) =>
       setSource(e.target.result)
-    }
-    reader.readAsText(event.target.files[0])
+    reader.readAsText(file)
+  }
+  function onInputChange(event) {
+    event.preventDefault()
+    readFile(event.target.files[0])
+  }
+  function onDrop(event) {
+    event.preventDefault()
+    readFile(event.dataTransfer.files[0])
+    setDragged(false)
+  }
+  function onDragOver(event) {
+    event.stopPropagation()
+    event.preventDefault()
+  }
+  function onDragEnter(event) {
+    event.stopPropagation()
+    event.preventDefault()
+    setDragged(true)
   }
 
   return (
-    <div>
-      <input type="file" accept=".ipynb,application/x-ipynb+json" onChange={readFile} />
+    <div
+      onDragOver={onDragOver}
+      onDrop={onDrop}>
+      <div onDragEnter={onDragEnter} style={{
+        padding: 20,
+        border: '1px solid #999',
+        backgroundColor: dragged ? '#ddd' : '#efefef'
+      }}>
+        <span>Drag and drop file here or </span>
+        <input type="file" onChange={onInputChange}
+          accept=".ipynb,application/x-ipynb+json" />
+      </div>
       <NbViewer source={source} markdown={MathMarkdown} code={Highlighter} />
     </div>
   )

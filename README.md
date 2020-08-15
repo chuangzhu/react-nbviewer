@@ -36,6 +36,36 @@ Importing `react-nbviewer/dist/index.css` is not required. You can style the com
 | `markdown` | `ReactNode<{source: string}>` | (Optional) The React component to render Markdown. [`react-markdown`](https://github.com/rexxars/react-markdown) is recommended. |
 | `code` | `ReactNode<{language: string, children: string}>` | (Optional) The React component to highlight code blocks. |
 
+## Complete example
+
+Here's a more complete example which also renders math in Markdown cells:
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import NbViewer from 'react-nbviewer'
+import Markdown from 'react-markdown'
+import MathPlugin from 'remark-math'
+import { InlineMath, BlockMath } from 'react-katex'
+import Highlighter from 'react-syntax-highlighter'
+import 'react-nbviewer/dist/index.css'
+import 'katex/dist/katex.min.css'
+
+const MathMarkdown = (props) => {
+  const renderers = {
+    math: ({ value }) => <BlockMath math={value} />,
+    inlineMath: ({ value }) => <InlineMath math={value} />,
+    code: props => <Highlighter language={props.language}>{props.value}</Highlighter>
+  }
+  return <Markdown renderers={renderers} plugins={[MathPlugin]} source={props.source} />
+}
+
+ReactDOM.render(
+  <NbViewer source="{.ipynb file content}" markdown={MathMarkdown} code={Highlighter} />,
+  document.getElementById('root')
+)
+```
+
 ## License
 
 MIT © [chuangzhu](https://github.com/chuangzhu)
