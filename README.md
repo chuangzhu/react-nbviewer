@@ -46,15 +46,15 @@ import ReactDOM from 'react-dom'
 import NbViewer from 'react-nbviewer'
 import Markdown from 'react-markdown'
 import MathPlugin from 'remark-math'
-import { InlineMath, BlockMath } from 'react-katex'
+import TeX from '@matejmazur/react-katex'
 import Highlighter from 'react-syntax-highlighter'
 import 'react-nbviewer/dist/index.css'
 import 'katex/dist/katex.min.css'
 
 const MathMarkdown = (props) => {
   const renderers = {
-    math: ({ value }) => <BlockMath math={value} />,
-    inlineMath: ({ value }) => <InlineMath math={value} />,
+    math: ({ value }) => <TeX block math={value} />,
+    inlineMath: ({ value }) => <TeX math={value} />,
     code: props => <Highlighter language={props.language}>{props.value}</Highlighter>
   }
   return <Markdown renderers={renderers} plugins={[MathPlugin]} source={props.source} />
