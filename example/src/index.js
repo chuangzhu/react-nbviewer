@@ -32,7 +32,22 @@ const App = () => {
       .then(src => src.text())
       .then(src => setSource(src))
   }, [])
-  return <NbViewer source={source} markdown={MathMarkdown} code={Highlighter} />
+
+  function readFile(event) {
+    event.preventDefault()
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setSource(e.target.result)
+    }
+    reader.readAsText(event.target.files[0])
+  }
+
+  return (
+    <div>
+      <input type="file" accept=".ipynb,application/x-ipynb+json" onChange={readFile} />
+      <NbViewer source={source} markdown={MathMarkdown} code={Highlighter} />
+    </div>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
