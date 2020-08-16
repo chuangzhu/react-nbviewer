@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import AnsiPre from './AnsiPre'
 import styles from './index.css'
 
 const base64ToImage = (mime: string, base64: string) => (
@@ -67,46 +68,14 @@ const StreamOutput = ({ output }: { output: NbStreamOutput }) => {
     }`
   return (
     <div className={className}>
-      <pre>{output.text.join('')}</pre>
+      <AnsiPre>{output.text.join('')}</AnsiPre>
     </div>
   )
 }
 
-const ansiClassNames = {
-  30: `ansi_black_fg ${styles.ansi_black_fg}`,
-  31: `ansi_red_fg ${styles.ansi_red_fg}`,
-  32: `ansi_green_fg ${styles.ansi_green_fg}`,
-  33: `ansi_yellow_fg ${styles.ansi_yellow_fg}`,
-  34: `ansi_blue_fg ${styles.ansi_blue_fg}`,
-  35: `ansi_magenta_fg ${styles.ansi_magenta_fg}`,
-  36: `ansi_cyan_fg ${styles.ansi_cyan_fg}`,
-  37: `ansi_white_fg ${styles.ansi_white_fg}`,
-}
-
-function ansiCodeToClassName(ansiCode: string) {
-  const codes = ansiCode.slice(2, -1).split(';')
-  if (codes === ['0'])
-    return null
-  return codes.map(c => ansiClassNames[c]).join(' ')
-}
-
 const ErrorOutput = ({ output }: { output: NbErrorOutput }) => {
   // Some ANSI escape codes are used to colorize the error output
-  // \033[SGR;FG;BGm
-  const r = /(\x1b\[.+?m)/g
-  const traceback = output.traceback.join('')
-  const splitted = traceback.split(r)
-  const spans: React.ReactChild[] = []
-  let lastClassName: string | null = null
-  splitted.forEach((s, i) => {
-    if (r.test(s)) {
-      lastClassName = ansiCodeToClassName(s)
-      return
-    }
-    if (!lastClassName) spans.push(s)
-    else spans.push(<span className={lastClassName} key={i}>{s}</span>)
-  })
-  return <pre>{spans}</pre>
+  return <AnsiPre>{output.traceback.join('')}</AnsiPre>
 }
 
 interface CodeComponentProps {
