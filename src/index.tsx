@@ -10,7 +10,7 @@ const base64ToImage = (mime: string, base64: string) => (
 // Instead, let's parse the raw output
 function getDataFrame(raw: string) {
   const rows = raw.split('\n')
-  const elements = rows.map(r => r.split('  '))
+  const elements = rows.map(r => r.split(/\s+/))
   return (
     <table className={`dataframe ${styles.dataframe}`}>
       <thead>
@@ -38,10 +38,14 @@ const DisplayDataOutput = ({ output }: {
 }) => {
   const { data: datas } = output
   const formats = ['text/html', 'image/svg+xml', 'image/png', 'image/jpeg', 'text/plain']
+
   // e.g. pandas.DataFrame
-  if ((formats[0] in datas) && (formats[4] in datas)) {
+  if ((formats[0] in datas) && (formats[4] in datas) &&
+    datas[formats[0]].join('').includes('class="dataframe"') &&
+    ! /^<.+>$/.test(datas[formats[4]])) {
     return getDataFrame(datas[formats[4]].join(''))
   }
+
   for (const format of formats) {
     if (format in datas) {
       const datalines = datas[format]
@@ -50,13 +54,13 @@ const DisplayDataOutput = ({ output }: {
         return <img src={`data:image/svg+xml;utf8,${svg}`} />
       }
       if (format === 'text/html')
-        return <iframe srcDoc={datalines.join('')}></iframe>
+        return <iframe srcDoc={datalines.join('')} />
       if (format.startsWith('image/')) {
         if (Array.isArray(datalines))
           return base64ToImage(format, datalines[0])
         return base64ToImage(format, datalines)
       }
-      return <pre><code>{datalines.join('')}</code></pre>
+      return <AnsiPre>{datalines.join('')}</AnsiPre>
     }
   }
   throw new Error('Unsupported output format')

@@ -6,6 +6,12 @@
   border: 1px solid;
 }
 
+iframe {
+  border: none;
+  width: 600px;
+  height: 400px;
+}
+
 .input_prompt, .output_prompt {
   text-align: right;
   vertical-align: top;
