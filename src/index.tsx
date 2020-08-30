@@ -96,40 +96,36 @@ const CodeCell = ({ cell, ...props }: {
 
   return (
     <Fragment>
-      <tr>
-        {/* "In [...]:" for every code cell */}
-        <td className={`input_prompt ${styles.input_prompt}`}>
-          <pre>{`In [${cell.execution_count || ' '}]:`}</pre>
-        </td>
-        <td>
-          <props.code language={props.language}>{source}</props.code>
-        </td>
-      </tr>
+      {/* "In [...]:" for every code cell */}
+      <div className={`input_prompt ${styles.input_prompt}`}>
+        <pre>{`In [${cell.execution_count || ' '}]:`}</pre>
+      </div>
+      <div className={`inner_cell ${styles.inner_cell}`}>
+        <props.code language={props.language}>{source}</props.code>
+      </div>
       {cell.outputs.map((output, i) => {
-        return (
-          <tr key={i}>
-            <td className={`output_prompt ${styles.output_prompt}`}><pre>
-              {output.output_type === 'execute_result' ?
-                `Out[${output.execution_count}]:` : ''}
-            </pre></td>
-            <td>
-              {(() => {
-                switch (output.output_type) {
-                  // The only difference between these two is "Out[...]:"
-                  case 'execute_result':
-                  case 'display_data':
-                    return <DisplayDataOutput output={output} />
-                  case 'stream':
-                    return <StreamOutput output={output} />
-                  case 'error':
-                    return <ErrorOutput output={output} />
-                  default:
-                    return undefined
-                }
-              })()}
-            </td>
-          </tr>
-        )
+        return <Fragment key={i}>
+          <div className={`output_prompt ${styles.output_prompt}`}><pre>
+            {output.output_type === 'execute_result' ?
+              `Out[${output.execution_count}]:` : ''}
+          </pre></div>
+          <div className={`inner_cell ${styles.inner_cell}`}>
+            {(() => {
+              switch (output.output_type) {
+                // The only difference between these two is "Out[...]:"
+                case 'execute_result':
+                case 'display_data':
+                  return <DisplayDataOutput output={output} />
+                case 'stream':
+                  return <StreamOutput output={output} />
+                case 'error':
+                  return <ErrorOutput output={output} />
+                default:
+                  return undefined
+              }
+            })()}
+          </div>
+        </Fragment>
       })}
     </Fragment>
   )
@@ -161,25 +157,20 @@ export default function NbViewer({
     ipynb.metadata.language_info?.name || 'python'
 
   return (
-    <table>
-      <tbody>
-        {ipynb.cells.map((cell, i) => (
-          cell.cell_type === 'code' ?
-            <CodeCell cell={cell} language={language} code={code} key={i} /> :
+    <div className={`notebook_container ${styles.notebook_container}`}>
+      {ipynb.cells.map((cell, i) => (
+        cell.cell_type === 'code' ?
+          <CodeCell cell={cell} language={language} code={code} key={i} /> :
 
-            <tr key={i}>
-              <td />
-              <td>{
-                // Not using JSX here because "markdown" is in lower case
-                React.createElement(markdown, {
-                  source: cell.source.join(''),
-                  key: i
-                }, null)
-              }</td>
-            </tr>
-        ))}
-      </tbody>
-    </table>
+          <div className={`inner_cell ${styles.inner_cell}`}>{
+            // Not using JSX here because "markdown" is in lower case
+            React.createElement(markdown, {
+              source: cell.source.join(''),
+              key: i
+            }, null)
+          }</div>
+      ))}
+    </div>
   )
 }
 

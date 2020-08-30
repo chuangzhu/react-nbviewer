@@ -1,26 +1,42 @@
+.notebook_container {
+  display: grid;
+  grid-template-columns: [col-begin] max-content [col-split] auto [col-end];
+}
+
+.inner_cell {
+  grid-column-start: col-split;
+  grid-column-end: col-end;
+}
+
+.input_prompt,
+.output_prompt {
+  grid-column-start: col-begin;
+  grid-column-end: col-split;
+  text-align: right;
+  vertical-align: top;
+}
+
+.input_prompt {
+  color: #303f9f;
+}
+.output_prompt {
+  color: #d84315;
+}
+
 .dataframe {
   border-collapse: collapse;
 }
 
-.dataframe, .dataframe th, .dataframe td {
+.dataframe,
+.dataframe th,
+.dataframe td {
   border: 1px solid;
 }
 
-iframe {
+.inner_cell iframe {
   border: none;
-  width: 600px;
+  width: 100%;
   height: 400px;
-}
-
-.input_prompt, .output_prompt {
-  text-align: right;
-  vertical-align: top;
-}
-.input_prompt {
-  color: #303F9F;
-}
-.output_prompt {
-  color: #D84315;
 }
 
 .output_stderr {
@@ -28,27 +44,26 @@ iframe {
 }
 
 .ansi_black_fg {
-  color: #3E424D;
+  color: #3e424d;
 }
 .ansi_red_fg {
-  color: #E75C58;
+  color: #e75c58;
 }
 .ansi_green_fg {
-  color: #00A250;
+  color: #00a250;
 }
 .ansi_yellow_fg {
-  color: #DDB62B;
+  color: #ddb62b;
 }
 .ansi_blue_fg {
-  color: #208FFB;
+  color: #208ffb;
 }
 .ansi_magenta_fg {
-  color: #D160C4;
+  color: #d160c4;
 }
 .ansi_cyan_fg {
-  color: #60C6C8;
+  color: #60c6c8;
 }
 .ansi_white_fg {
-  color: #C5C1B4;
+  color: #c5c1b4;
 }
-
