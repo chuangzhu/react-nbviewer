@@ -63,6 +63,7 @@ const App = () => {
 
   return (
     <div
+      style={{ margin: '0 1%' }}
       onDragOver={onDragOver}
       onDrop={onDrop}>
       <div onDragEnter={onDragEnter} style={{

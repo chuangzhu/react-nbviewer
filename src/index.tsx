@@ -105,10 +105,12 @@ const CodeCell = ({ cell, ...props }: {
       </div>
       {cell.outputs.map((output, i) => {
         return <Fragment key={i}>
-          <div className={`output_prompt ${styles.output_prompt}`}><pre>
-            {output.output_type === 'execute_result' ?
-              `Out[${output.execution_count}]:` : ''}
-          </pre></div>
+
+          {output.output_type === 'execute_result' &&
+            <div className={`output_prompt ${styles.output_prompt}`}>
+              <pre>{`Out[${output.execution_count}]:`}</pre>
+            </div>}
+
           <div className={`inner_cell ${styles.inner_cell}`}>
             {(() => {
               switch (output.output_type) {
@@ -125,6 +127,7 @@ const CodeCell = ({ cell, ...props }: {
               }
             })()}
           </div>
+
         </Fragment>
       })}
     </Fragment>
