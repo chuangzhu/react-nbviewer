@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "53f8025df7aecc179fec1c99ecad35d5",
+    "revision": "6db44eb004efc1ab2c620b067f3bb9e6",
     "url": "/react-nbviewer/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-nbviewer/static/css/2.10453b48.chunk.css"
   },
   {
-    "revision": "935fbe77562d48b95ba9",
-    "url": "/react-nbviewer/static/css/main.86303b7b.chunk.css"
+    "revision": "069ca503d3f9442cedbc",
+    "url": "/react-nbviewer/static/css/main.da9a73b4.chunk.css"
   },
   {
     "revision": "95d6d8de56c8df6cba44",
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-nbviewer/static/js/2.3d00ad4f.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "935fbe77562d48b95ba9",
-    "url": "/react-nbviewer/static/js/main.4b59d322.chunk.js"
+    "revision": "069ca503d3f9442cedbc",
+    "url": "/react-nbviewer/static/js/main.79a58fda.chunk.js"
   },
   {
     "revision": "852eb0fe6afe98b9a293",
