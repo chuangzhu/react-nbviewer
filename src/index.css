@@ -34,15 +34,18 @@
 
 .inner_cell pre {
   overflow-x: auto;
+  box-sizing: border-box;
   width: 100%;
 }
 
 .inner_cell img {
+  box-sizing: border-box;
   max-width: 100%;
 }
 
 .inner_cell iframe {
   border: none;
+  box-sizing: border-box;
   width: 100%;
   height: 400px;
 }
@@ -55,6 +58,7 @@
 .dataframe th,
 .dataframe td {
   border: 1px solid;
+  padding: 3px 8px;
 }
 
 .output_stderr {
