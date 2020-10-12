@@ -16,7 +16,7 @@ npm install --save react-nbviewer
 import React from 'react'
 
 import NbViewer from 'react-nbviewer'
-import 'react-nbviewer/dist/index.css'
+import 'react-nbviewer/index.css'
 
 import Markdown from 'react-markdown'
 import SyntaxHighlighter from 'react-syntax-highlighter'
@@ -27,7 +27,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
   code={SyntaxHighlighter} />
 ```
 
-Importing `react-nbviewer/dist/index.css` is not required. You can style the component on your own. See [`src/index.css`](./src/index.css) for details.
+Importing `react-nbviewer/index.css` is not required. You can style the component on your own. See [`index.css`](./index.css) for details.
 
 ## Options
 | Name | Type | Description |
@@ -48,7 +48,7 @@ import Markdown from 'react-markdown'
 import MathPlugin from 'remark-math'
 import TeX from '@matejmazur/react-katex'
 import Highlighter from 'react-syntax-highlighter'
-import 'react-nbviewer/dist/index.css'
+import 'react-nbviewer/index.css'
 import 'katex/dist/katex.min.css'
 
 const MathMarkdown = (props) => {

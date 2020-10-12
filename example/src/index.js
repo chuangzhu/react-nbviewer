@@ -7,7 +7,7 @@ import MathPlugin from 'remark-math'
 import TeX from '@matejmazur/react-katex'
 import Highlighter from 'react-syntax-highlighter'
 
-import 'react-nbviewer/dist/index.css'
+import 'react-nbviewer/index.css'
 import 'katex/dist/katex.min.css'
 
 const MathMarkdown = (props) => {

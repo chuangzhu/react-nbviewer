@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
 import AnsiPre from './AnsiPre'
-import styles from './index.css'
 
 const base64ToImage = (mime: string, base64: string) => (
   <img src={`data:${mime};base64,${base64}`} />
@@ -12,7 +11,7 @@ function getDataFrame(raw: string) {
   const rows = raw.split('\n')
   const elements = rows.map(r => r.split(/\s+/))
   return (
-    <table className={`dataframe ${styles.dataframe}`}>
+    <table className="dataframe">
       <thead>
         <tr>
           <td />
@@ -67,9 +66,7 @@ const DisplayDataOutput = ({ output }: {
 }
 
 const StreamOutput = ({ output }: { output: NbStreamOutput }) => {
-  const className = `output_stream ${styles.output_stream} ${
-    output.name === 'stderr' ? `output_stderr ${styles.output_stderr}` : ''
-    }`
+  const className = `output_stream ${output.name === 'stderr' ? 'output_stderr' : ''}`
   return (
     <div className={className}>
       <AnsiPre>{output.text.join('')}</AnsiPre>
@@ -97,21 +94,21 @@ const CodeCell = ({ cell, ...props }: {
   return (
     <Fragment>
       {/* "In [...]:" for every code cell */}
-      <div className={`input_prompt ${styles.input_prompt}`}>
+      <div className="input_prompt">
         <pre>{`In [${cell.execution_count || ' '}]:`}</pre>
       </div>
-      <div className={`inner_cell ${styles.inner_cell}`}>
+      <div className="inner_cell">
         <props.code language={props.language}>{source}</props.code>
       </div>
       {cell.outputs.map((output, i) => {
         return <Fragment key={i}>
 
           {output.output_type === 'execute_result' &&
-            <div className={`output_prompt ${styles.output_prompt}`}>
+            <div className="output_prompt">
               <pre>{`Out[${output.execution_count}]:`}</pre>
             </div>}
 
-          <div className={`inner_cell ${styles.inner_cell}`}>
+          <div className="inner_cell">
             {(() => {
               switch (output.output_type) {
                 // The only difference between these two is "Out[...]:"
@@ -160,12 +157,12 @@ export default function NbViewer({
     ipynb.metadata.language_info?.name || 'python'
 
   return (
-    <div className={`notebook_container ${styles.notebook_container}`}>
+    <div className="notebook_container">
       {ipynb.cells.map((cell, i) => (
         cell.cell_type === 'code' ?
           <CodeCell cell={cell} language={language} code={code} key={i} /> :
 
-          <div className={`inner_cell ${styles.inner_cell}`}>{
+          <div className="inner_cell">{
             // Not using JSX here because "markdown" is in lower case
             React.createElement(markdown, {
               source: cell.source.join(''),

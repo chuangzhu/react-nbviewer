@@ -1,15 +1,14 @@
 import React from 'react'
-import styles from './index.css'
 
 const ansiClassNames = {
-  30: `ansi_black_fg ${styles.ansi_black_fg}`,
-  31: `ansi_red_fg ${styles.ansi_red_fg}`,
-  32: `ansi_green_fg ${styles.ansi_green_fg}`,
-  33: `ansi_yellow_fg ${styles.ansi_yellow_fg}`,
-  34: `ansi_blue_fg ${styles.ansi_blue_fg}`,
-  35: `ansi_magenta_fg ${styles.ansi_magenta_fg}`,
-  36: `ansi_cyan_fg ${styles.ansi_cyan_fg}`,
-  37: `ansi_white_fg ${styles.ansi_white_fg}`,
+  30: 'ansi_black_fg',
+  31: 'ansi_red_fg',
+  32: 'ansi_green_fg',
+  33: 'ansi_yellow_fg',
+  34: 'ansi_blue_fg',
+  35: 'ansi_magenta_fg',
+  36: 'ansi_cyan_fg',
+  37: 'ansi_white_fg',
 }
 
 function ansiCodeToClassName(ansiCode: string) {
